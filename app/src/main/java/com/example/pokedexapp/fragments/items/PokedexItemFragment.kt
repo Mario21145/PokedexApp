@@ -1,4 +1,4 @@
-package com.example.pokedexapp.fragments
+package com.example.pokedexapp.fragments.items
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -16,6 +16,5 @@ class PokedexItemFragment : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_pokedex_item, container, false)
     }
-
 
 }

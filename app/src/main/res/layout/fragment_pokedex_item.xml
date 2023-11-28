@@ -1,14 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.PokedexItemFragment">
+    tools:context=".fragments.items.PokedexItemFragment"
+    >
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/pokedex_shape"
+            android:backgroundTint="@color/material_dynamic_secondary20"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            >
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <ImageView
+                    android:id="@+id/PokemonImage"
+                    android:layout_width="301dp"
+                    android:layout_height="223dp"
+                    android:layout_marginTop="14dp"
+                    android:foregroundGravity="center"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:src="@drawable/placeholder" />
+
+                <TextView
+                    android:id="@+id/PokemonName"
+                    android:layout_width="200dp"
+                    android:layout_height="40dp"
+                    android:gravity="center"
+                    android:text="Bulbasaur"
+                    android:textSize="30dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    app:layout_constraintTop_toBottomOf="@id/PokemonImage"
+                    app:layout_constraintEnd_toEndOf="@id/PokemonImage"
+                    app:layout_constraintStart_toStartOf="@id/PokemonImage"
+                    />
+
+                <TextView
+                    android:id="@+id/PokemonId"
+                    android:layout_width="55dp"
+                    android:layout_height="41dp"
+                    android:gravity="center"
+                    android:text="001"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    app:layout_constraintTop_toBottomOf="@id/PokemonName"
+                    app:layout_constraintEnd_toEndOf="@id/PokemonName"
+                    app:layout_constraintStart_toStartOf="@id/PokemonName"
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 </FrameLayout>
