@@ -15,6 +15,6 @@ class PokedexInfoItemFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_pokedex_info_item, container, false)
+        return inflater.inflate(R.layout.fragment_pokedex_item_preview, container, false)
     }
 }
