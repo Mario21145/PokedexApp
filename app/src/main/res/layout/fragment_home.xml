@@ -78,7 +78,7 @@
 
 
             <FrameLayout
-                android:id="@+id/Home"
+                android:id="@+id/HomeFrame"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
@@ -119,7 +119,7 @@
                 android:layout_height="200dp"
                 android:src="@drawable/icon_home"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/Home"
+                app:layout_constraintBottom_toTopOf="@id/HomeFrame"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                  />

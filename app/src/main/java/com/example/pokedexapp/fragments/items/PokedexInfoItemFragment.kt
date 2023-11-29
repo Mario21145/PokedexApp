@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.pokedexapp.R
 
-
 class PokedexInfoItemFragment : Fragment() {
 
     override fun onCreateView(
@@ -15,6 +14,7 @@ class PokedexInfoItemFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_pokedex_item_preview, container, false)
+        return inflater.inflate(R.layout.fragment_pokedex_item_final, container, false)
     }
+
 }
