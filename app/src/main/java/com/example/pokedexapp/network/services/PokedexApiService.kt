@@ -1,13 +1,15 @@
 package com.example.pokedexapp.network.services
 
-import com.example.pokedexapp.network.models.pokemon
+import com.example.pokedexapp.network.models.PokemonResponse
+import com.example.pokedexapp.network.models.Pokemon
 import com.google.gson.Gson
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Header
 
 
-const val BASE_URL = "https://github.com/brunomoreirazup/kanto-pokedex-json/blob/master"
+const val BASE_URL = "https://raw.githubusercontent.com/Mario21145/PokemonData/main/"
 
 
 private val retrofit = Retrofit.Builder()
@@ -19,8 +21,8 @@ private val retrofit = Retrofit.Builder()
 //val pokemonData: pokemon = gson.fromJson(yourJsonString, pokemon::class.java)
 
 interface PokedexApiService{
-    @GET("/pokedex.json")
-    suspend fun getData() : List<pokemon>
+    @GET("pokemon.json")
+    suspend fun getPokemonList() : PokemonResponse
 }
 
 object PokemonApi {

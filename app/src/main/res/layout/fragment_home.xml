@@ -20,6 +20,7 @@
                 android:id="@+id/pokemon"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="10dp"
                 android:background="@drawable/pokedex_shape_home_bottom"
                 android:backgroundTint="@color/material_dynamic_secondary20"
                 android:gravity="center"
@@ -38,7 +39,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="40dp"
-
+                        app:tint = "@color/white"
                         android:backgroundTint="@color/material_dynamic_primary80"
                         android:src="@drawable/charmander"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -53,6 +54,7 @@
                         android:layout_marginStart="40dp"
                         android:backgroundTint="@color/material_dynamic_primary80"
                         android:src="@drawable/squirtle"
+                        app:tint = "@color/white"
                         app:layout_constraintStart_toEndOf="@id/historyPokeball"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -68,6 +70,7 @@
                         android:layout_marginEnd="40dp"
                         android:backgroundTint="@color/material_dynamic_primary80"
                         android:src="@drawable/bulbasaur"
+                        app:tint = "@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/fab2" />
@@ -75,7 +78,6 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </RelativeLayout>
-
 
             <FrameLayout
                 android:id="@+id/HomeFrame"
@@ -101,7 +103,7 @@
                         android:layout_height="62dp"
                         android:backgroundTint="@color/material_dynamic_primary60"
                         android:text="go"
-                        android:textSize="30dp"
+                        android:textSize="30sp"
                         android:textStyle="bold"
                         android:gravity="center"
                         app:layout_constraintBottom_toBottomOf="parent"

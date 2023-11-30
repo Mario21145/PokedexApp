@@ -1,6 +1,14 @@
 package com.example.pokedexapp.network.models
 
-data class pokemon(
-    val generation: Int,
-    val pokemon: List<PokemonDetail>
+import com.squareup.moshi.JsonClass
+
+data class Pokemon(
+    val id: Int,
+    val name: String,
+    val types: List<String>,
+    val weight: String,
+    val height: String,
+    val hp: Int,
+    val imageUrl: String,
+    val description: String,
 )

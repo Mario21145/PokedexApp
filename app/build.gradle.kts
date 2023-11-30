@@ -7,6 +7,8 @@ android {
     namespace = "com.example.pokedexapp"
     compileSdk = 34
 
+
+
     defaultConfig {
         applicationId = "com.example.pokedexapp"
         minSdk = 30
@@ -31,6 +33,8 @@ android {
         dataBinding = true
     }
 
+
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -49,12 +53,16 @@ dependencies {
 
     implementation("androidx.fragment:fragment-ktx:1.6.2")
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.5")
+
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+
     implementation ("com.squareup.retrofit2:converter-moshi:2.9.0")
     implementation ("com.squareup.moshi:moshi-kotlin:1.13.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation ("io.coil-kt:coil:2.5.0")
+
     implementation ("io.coil-kt:coil:2.5.0")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
 
