@@ -1,28 +1,23 @@
 package com.example.pokedexapp.fragments
 
+import android.animation.ObjectAnimator
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.RelativeLayout
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
 import com.example.pokedexapp.R
 import com.example.pokedexapp.adapters.PokedexItemAdapter
-import com.example.pokedexapp.databinding.CustomNavBarBinding
-import com.example.pokedexapp.databinding.FragmentHomeBinding
 import com.example.pokedexapp.databinding.FragmentPokedexBinding
+import com.example.pokedexapp.viewModels.PokemonApiStatus
 import com.example.pokedexapp.viewModels.ViewModelPokedex
-import kotlinx.coroutines.launch
+
 
 class PokedexFragment : Fragment() {
 
@@ -47,19 +42,37 @@ class PokedexFragment : Fragment() {
             viewModel = sharedViewModel
             lifecycleOwner = this@PokedexFragment
         }
-        Log.d("responsePokedexFragment", sharedViewModel.pokemons.value.toString())
+
+        val bounceAnimatorIcon = ObjectAnimator.ofFloat(
+            binding.status, // For network icon error
+            "translationY",
+            0f,
+            -30f,
+            0f,
+            15f,
+            0f
+        )
+        bounceAnimatorIcon.duration = 1200
+
+        if (sharedViewModel.pokemons.value!!.isEmpty()) {
+            binding.PokemonsRecyclerView.visibility = View.GONE
+            binding.status.visibility = View.VISIBLE
+            bounceAnimatorIcon.start()
+        } else {
+            binding.status.visibility = View.GONE
+        }
 
         sharedViewModel.pokemons.observe(viewLifecycleOwner, Observer { _ ->
             binding.PokemonsRecyclerView.adapter =  PokedexItemAdapter(sharedViewModel) { selectedPokemon ->
-                sharedViewModel.setPokemon(selectedPokemon)
-                findNavController().navigate(R.id.action_pokedexFragment_to_pokedexItemFragment)
+                    if(sharedViewModel.status.value == PokemonApiStatus.DONE){
+                        sharedViewModel.setPokemon(selectedPokemon)
+                        findNavController().navigate(R.id.action_pokedexFragment_to_pokedexItemFragment)
+                    }
             }
         })
 
-
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                Log.d("OnBackPressed", "Back key pressed in Fragment.")
                 findNavController().popBackStack()
             }
         }

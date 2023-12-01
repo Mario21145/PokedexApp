@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.pokedexapp.R
@@ -14,10 +15,13 @@ import com.example.pokedexapp.network.models.Pokemon
 import com.example.pokedexapp.viewModels.ViewModelPokedex
 
 
-class PokedexItemAdapter(private val viewModel: ViewModelPokedex , private val clickListener: (Pokemon) -> Unit) :
+class PokedexItemAdapter(
+    private val viewModel: ViewModelPokedex,
+    private val clickListener: (Pokemon) -> Unit
+) :
     RecyclerView.Adapter<PokedexItemAdapter.PokemonviewHolder>() {
 
-    val pokemonData : List<Pokemon> =  viewModel.pokemons.value ?: emptyList()
+    val pokemonData: List<Pokemon> = viewModel.pokemons.value ?: emptyList()
 
     class PokemonviewHolder(view: View?) : RecyclerView.ViewHolder(view!!) {
         val imageView = view!!.findViewById<ImageView>(R.id.PokemonImagePreview)
@@ -39,16 +43,14 @@ class PokedexItemAdapter(private val viewModel: ViewModelPokedex , private val c
         val pokemonItem = pokemonData[position]
         val pokemonImage = pokemonItem.imageUrl
 
-        holder.imageView.setOnClickListener{
-            clickListener(pokemonItem)
-//            Log.d("Pokemon types" , pokemonItem.types.toString())
-//            Log.d("PokemonItemViewModel" , viewModel.currentPokemon.toString())
-        }
-
-        holder.imageView.load(pokemonImage){
+        holder.imageView.load(pokemonImage) {
             crossfade(true)
             placeholder(R.drawable.placeholder_item_loading)
             error(R.drawable.image_error)
+        }
+
+        holder.imageView.setOnClickListener {
+            clickListener(pokemonItem)
         }
 
         holder.id.text = pokemonItem.id.toString()

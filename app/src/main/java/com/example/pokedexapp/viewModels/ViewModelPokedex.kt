@@ -8,46 +8,45 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pokedexapp.network.models.Pokemon
 import com.example.pokedexapp.network.services.PokemonApi
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-enum class PokemonApiStatus { LOADING, DONE, ERROR }
-
-
+enum class PokemonApiStatus {DEFAULT, LOADING, DONE, ERROR }
 
 class ViewModelPokedex : ViewModel() {
 
-    private val _status = MutableLiveData<PokemonApiStatus>()
+    private var _status = MutableLiveData<PokemonApiStatus>().apply {
+        value = PokemonApiStatus.DEFAULT
+    }
     val status: LiveData<PokemonApiStatus> = _status
 
-    private val _pokemons = MutableLiveData<List<Pokemon>>()
+    private val _pokemons = MutableLiveData<List<Pokemon>>().apply {
+        listOf<Pokemon>()
+    }
     val pokemons: LiveData<List<Pokemon>> = _pokemons
 
     private val _currentPokemon = mutableListOf<Pokemon>()
     val currentPokemon = _currentPokemon
 
-    init {
-        getPokemons()
-    }
-
     fun setPokemon(pokemon : Pokemon){
         _currentPokemon.add(pokemon)
     }
 
+    init {
+        getPokemons()
+    }
+
+
     private fun getPokemons() {
         viewModelScope.launch {
             _status.value = PokemonApiStatus.LOADING
-
-            Log.d(
-                "ResponseViewModelResult",
-                PokemonApi.retrofitService.getPokemonList().pokemon.toString()
-            )
-
             try {
                 _pokemons.value = PokemonApi.retrofitService.getPokemonList().pokemon
                 _status.value = PokemonApiStatus.DONE
             } catch (e: Exception) {
                 _status.value = PokemonApiStatus.ERROR
+                _pokemons.value = listOf()
             }
         }
     }

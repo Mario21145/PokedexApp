@@ -49,6 +49,8 @@ class PokedexInfoItemFragment : Fragment() {
         }
         requireActivity().onBackPressedDispatcher.addCallback(callback)
 
+
+        val typesText = data[0].types.joinToString("\n")
         if(data.isNotEmpty()){
 
             binding.PokemonImage.load(data[0].imageUrl){
@@ -63,12 +65,10 @@ class PokedexInfoItemFragment : Fragment() {
             binding.weightText.text = data[0].weight
             binding.heightText.text = data[0].height
             binding.hpText.text = data[0].hp.toString()
-            val typesText = data[0].types.joinToString("\n")
             binding.typeText.text = typesText
         }
 
         //Animations
-
         val bounceAnimatorImage = ObjectAnimator.ofFloat(
             binding.PokemonImage, // For pokemon Image
             "Y",
@@ -83,7 +83,7 @@ class PokedexInfoItemFragment : Fragment() {
 
 
         val bounceAnimator = ObjectAnimator.ofFloat(
-            binding.shareFab, // For pokemon Image
+            binding.shareFab, // For floating action bar share
             "Rotation",
             0f,
             -40f,
@@ -99,7 +99,16 @@ class PokedexInfoItemFragment : Fragment() {
 
 
 
-
+        val pokemonSummary = getString(
+            R.string.pokemon_details,
+            data[0].id.toString(),
+            data[0].name.toString(),
+            typesText,
+            data[0].weight.toString(),
+            data[0].height.toString(),
+            data[0].hp.toString(),
+            data[0].description.toString(),
+        )
 
         binding.backArrow.setOnClickListener{
             data.clear()
@@ -109,7 +118,7 @@ class PokedexInfoItemFragment : Fragment() {
         binding.shareFab.setOnClickListener{
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.type = "text/plain"
-            shareIntent.putExtra(Intent.EXTRA_TEXT, data.toString())
+            shareIntent.putExtra(Intent.EXTRA_TEXT, pokemonSummary)
 
             val chooserIntent = Intent.createChooser(shareIntent, "Share via")
 
