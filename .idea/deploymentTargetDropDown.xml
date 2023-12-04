@@ -13,13 +13,14 @@
       </Target>
     </runningDeviceTargetSelectedWithDropDown>
     <timeTargetWasSelectedWithDropDown value="2023-12-04T13:39:30.941254900Z" />
+    <multipleDevicesSelectedInDropDown value="true" />
     <runningDeviceTargetsSelectedWithDialog>
       <Target>
         <type value="RUNNING_DEVICE_TARGET" />
         <deviceKey>
           <Key>
-            <type value="VIRTUAL_DEVICE_PATH" />
-            <value value="C:\Users\zelak\.android\avd\Pixel_3a_API_33_2.avd" />
+            <type value="SERIAL_NUMBER" />
+            <value value="adb-ZY22GNT9LH-slq0xM._adb-tls-connect._tcp" />
           </Key>
         </deviceKey>
       </Target>
