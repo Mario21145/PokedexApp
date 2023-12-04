@@ -39,7 +39,6 @@ class PokedexInfoItemFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val data = sharedViewModel.currentPokemon
-
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 data.clear()
@@ -50,15 +49,14 @@ class PokedexInfoItemFragment : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(callback)
 
 
+
         val typesText = data[0].types.joinToString("\n")
         if(data.isNotEmpty()){
-
             binding.PokemonImage.load(data[0].imageUrl){
                 crossfade(true)
                 placeholder(R.drawable.placeholder_item_loading)
                 error(R.drawable.image_error)
             }
-
             binding.PokemonName.text = data[0].name
             binding.PokemonId.text = data[0].id.toString()
             binding.descriptionText.text = data[0].description
@@ -67,38 +65,6 @@ class PokedexInfoItemFragment : Fragment() {
             binding.hpText.text = data[0].hp.toString()
             binding.typeText.text = typesText
         }
-
-        //Animations
-        val bounceAnimatorImage = ObjectAnimator.ofFloat(
-            binding.PokemonImage, // For pokemon Image
-            "Y",
-            0f,
-            -30f,
-            0f,
-            -15f,
-            0f
-        )
-        bounceAnimatorImage.duration = 1500
-        bounceAnimatorImage.start()
-
-
-        val bounceAnimator = ObjectAnimator.ofFloat(
-            binding.shareFab, // For floating action bar share
-            "Rotation",
-            0f,
-            -40f,
-            0f,
-            10f,
-            0f
-        )
-
-        bounceAnimator.duration = 1200
-        bounceAnimator.start()
-
-
-
-
-
         val pokemonSummary = getString(
             R.string.pokemon_details,
             data[0].id.toString(),
@@ -109,6 +75,10 @@ class PokedexInfoItemFragment : Fragment() {
             data[0].hp.toString(),
             data[0].description.toString(),
         )
+
+
+
+
 
         binding.backArrow.setOnClickListener{
             data.clear()
@@ -125,10 +95,39 @@ class PokedexInfoItemFragment : Fragment() {
             if (shareIntent.resolveActivity(requireContext().packageManager) != null) {
                 requireContext().startActivity(chooserIntent)
             } else {
-
-                Toast.makeText(context, "Nessuna app disponibile per la condivisione", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Error during the sharing of data", Toast.LENGTH_SHORT).show()
             }
         }
+
+
+
+        //Animations
+        val bounceAnimatorImage = ObjectAnimator.ofFloat(
+            binding.PokemonImage, // For pokemon Image
+            "Y",
+            0f,
+            -30f,
+            0f,
+            -15f,
+            0f
+        )
+        bounceAnimatorImage.duration = 1500
+        bounceAnimatorImage.start()
+
+        val rotatorAnimator = ObjectAnimator.ofFloat(
+            binding.shareFab, // For floating action bar share
+            "Rotation",
+            0f,
+            -40f,
+            0f,
+            10f,
+            0f
+        )
+
+        rotatorAnimator.duration = 1200
+        rotatorAnimator.start()
+
+
 
     }
 
