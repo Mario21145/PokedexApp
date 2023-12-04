@@ -16,6 +16,8 @@ import com.example.pokedexapp.R
 import com.example.pokedexapp.viewModels.PokemonApiStatus
 import com.example.pokedexapp.viewModels.ViewModelPokedex
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 
 class HomeFragment : Fragment() {
 
@@ -46,12 +48,11 @@ class HomeFragment : Fragment() {
         })
 
         sharedViewModel.status.observe(viewLifecycleOwner, Observer {
+                val button = view.findViewById<Button>(R.id.goPokedex)
+                button.setOnClickListener {
+                    findNavController().navigate(R.id.action_homeFragment_to_pokedexFragment)
+                }
 
-
-            val button = view.findViewById<Button>(R.id.goPokedex)
-            button.setOnClickListener {
-                findNavController().navigate(R.id.action_homeFragment_to_pokedexFragment)
-            }
         })
 
 

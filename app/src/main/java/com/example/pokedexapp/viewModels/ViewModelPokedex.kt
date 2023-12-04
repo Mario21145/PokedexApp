@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pokedexapp.network.models.Pokemon
 import com.example.pokedexapp.network.services.PokemonApi
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -39,14 +40,16 @@ class ViewModelPokedex : ViewModel() {
 
 
     private fun getPokemons() {
-        viewModelScope.launch {
-            _status.value = PokemonApiStatus.LOADING
-            try {
-                _pokemons.value = PokemonApi.retrofitService.getPokemonList().pokemon
-                _status.value = PokemonApiStatus.DONE
-            } catch (e: Exception) {
-                _status.value = PokemonApiStatus.ERROR
-                _pokemons.value = listOf()
+        runBlocking{
+            viewModelScope.launch {
+                _status.value = PokemonApiStatus.LOADING
+                try {
+                    _pokemons.value = PokemonApi.retrofitService.getPokemonList().pokemon
+                    _status.value = PokemonApiStatus.DONE
+                } catch (e: Exception) {
+                    _status.value = PokemonApiStatus.ERROR
+                    _pokemons.value = listOf()
+                }
             }
         }
     }
