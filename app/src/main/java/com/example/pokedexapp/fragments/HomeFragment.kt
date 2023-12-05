@@ -50,7 +50,9 @@ class HomeFragment : Fragment() {
         sharedViewModel.status.observe(viewLifecycleOwner, Observer {
                 val button = view.findViewById<Button>(R.id.goPokedex)
                 button.setOnClickListener {
-                    findNavController().navigate(R.id.action_homeFragment_to_pokedexFragment)
+                    if(pokemonCountTextView.text != "0"){
+                        findNavController().navigate(R.id.action_homeFragment_to_pokedexFragment)
+                    }
                 }
 
         })
