@@ -1,13 +1,10 @@
 package com.example.pokedexapp.adapters
 
-
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.pokedexapp.R
@@ -19,9 +16,9 @@ class PokedexItemAdapter(
     private val viewModel: ViewModelPokedex,
     private val clickListener: (Pokemon) -> Unit
 ) :
-    RecyclerView.Adapter<PokedexItemAdapter.PokemonviewHolder>() {
+    RecyclerView.Adapter<PokedexItemAdapter.PokemonviewHolder>(){
 
-    val pokemonData: List<Pokemon> = viewModel.pokemons.value ?: emptyList()
+    private val pokemonData: List<Pokemon> = viewModel.pokemons.value ?: emptyList()
 
     class PokemonviewHolder(view: View?) : RecyclerView.ViewHolder(view!!) {
         val imageView = view!!.findViewById<ImageView>(R.id.PokemonImagePreview)
@@ -54,6 +51,5 @@ class PokedexItemAdapter(
         }
 
         holder.id.text = pokemonItem.id.toString()
-
     }
 }

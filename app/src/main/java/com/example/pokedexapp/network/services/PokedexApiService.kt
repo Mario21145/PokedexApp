@@ -11,14 +11,10 @@ import retrofit2.http.Header
 
 const val BASE_URL = "https://raw.githubusercontent.com/Mario21145/PokemonData/main/"
 
-
 private val retrofit = Retrofit.Builder()
     .baseUrl(BASE_URL)
     .addConverterFactory(GsonConverterFactory.create())
     .build()
-
-//val gson = Gson()
-//val pokemonData: pokemon = gson.fromJson(yourJsonString, pokemon::class.java)
 
 interface PokedexApiService{
     @GET("pokemon.json")
