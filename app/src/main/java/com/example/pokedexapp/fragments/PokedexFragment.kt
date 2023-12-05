@@ -3,9 +3,13 @@ package com.example.pokedexapp.fragments
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.Network
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +19,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -22,8 +27,16 @@ import androidx.navigation.fragment.findNavController
 import com.example.pokedexapp.R
 import com.example.pokedexapp.adapters.PokedexItemAdapter
 import com.example.pokedexapp.databinding.FragmentPokedexBinding
+import com.example.pokedexapp.network.models.Pokemon
+import com.example.pokedexapp.viewModels.NetworkStatus
 import com.example.pokedexapp.viewModels.PokemonApiStatus
 import com.example.pokedexapp.viewModels.ViewModelPokedex
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import okhttp3.internal.wait
 import java.util.Locale
 import kotlin.properties.Delegates
 
@@ -32,7 +45,6 @@ class PokedexFragment : Fragment() {
 
     private val sharedViewModel: ViewModelPokedex by activityViewModels()
     private lateinit var binding: FragmentPokedexBinding
-    private var isExpanded by Delegates.notNull<Boolean>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,15 +76,33 @@ class PokedexFragment : Fragment() {
         )
         bounceAnimatorIcon.duration = 1200
 
-        if (sharedViewModel.pokemons.value!!.isEmpty()) {
-            binding.PokemonsRecyclerView.visibility = View.GONE
-            binding.status.visibility = View.VISIBLE
-            bounceAnimatorIcon.start()
-        } else {
-            binding.status.visibility = View.GONE
-        }
 
-        sharedViewModel.pokemons.observe(viewLifecycleOwner, Observer { _ ->
+        val connectivityManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        connectivityManager.registerDefaultNetworkCallback(object : ConnectivityManager.NetworkCallback() {
+            override fun onAvailable(network: Network) {
+                GlobalScope.launch(Dispatchers.Main) {
+                    binding.statusIcon!!.visibility = View.GONE
+                    binding.searchPokemonBox.visibility = View.VISIBLE
+                }
+            }
+
+            override fun onLost(network: Network) {
+                GlobalScope.launch(Dispatchers.Main) {
+                    binding.PokemonsRecyclerView.visibility = View.GONE
+                    binding.searchPokemonBox.visibility = View.GONE
+                    binding.statusIcon!!.visibility = View.VISIBLE
+                    binding.backFab.visibility = View.GONE
+                    bounceAnimatorIcon.start()
+                    delay(2000L)
+                    sharedViewModel.pokemons.value = listOf()
+                    sharedViewModel.setStatus(PokemonApiStatus.DEFAULT)
+                    sharedViewModel.getPokemons()
+                    findNavController().popBackStack()
+                }
+            }
+        })
+
+        sharedViewModel.pokemons.observe(viewLifecycleOwner, Observer { pokemons ->
             binding.PokemonsRecyclerView.adapter =
                 PokedexItemAdapter(sharedViewModel) { selectedPokemon ->
                     if (sharedViewModel.status.value == PokemonApiStatus.DONE) {

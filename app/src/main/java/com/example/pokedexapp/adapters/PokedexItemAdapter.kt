@@ -18,7 +18,7 @@ class PokedexItemAdapter(
 ) :
     RecyclerView.Adapter<PokedexItemAdapter.PokemonviewHolder>(){
 
-    private val pokemonData: List<Pokemon> = viewModel.pokemons.value ?: emptyList()
+    private var pokemonData: List<Pokemon> = viewModel.pokemons.value ?: emptyList()
 
     class PokemonviewHolder(view: View?) : RecyclerView.ViewHolder(view!!) {
         val imageView = view!!.findViewById<ImageView>(R.id.PokemonImagePreview)
@@ -52,4 +52,10 @@ class PokedexItemAdapter(
 
         holder.id.text = pokemonItem.id.toString()
     }
+
+    fun updateData(newData: List<Pokemon>) {
+        pokemonData = newData
+        notifyDataSetChanged()
+    }
+
 }
