@@ -2,6 +2,7 @@ package com.example.pokedexapp.fragments
 
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,8 +10,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -20,6 +24,7 @@ import com.example.pokedexapp.adapters.PokedexItemAdapter
 import com.example.pokedexapp.databinding.FragmentPokedexBinding
 import com.example.pokedexapp.viewModels.PokemonApiStatus
 import com.example.pokedexapp.viewModels.ViewModelPokedex
+import java.util.Locale
 import kotlin.properties.Delegates
 
 
@@ -68,90 +73,59 @@ class PokedexFragment : Fragment() {
         }
 
         sharedViewModel.pokemons.observe(viewLifecycleOwner, Observer { _ ->
-            binding.PokemonsRecyclerView.adapter =  PokedexItemAdapter(sharedViewModel) { selectedPokemon ->
-                    if(sharedViewModel.status.value == PokemonApiStatus.DONE){
+            binding.PokemonsRecyclerView.adapter =
+                PokedexItemAdapter(sharedViewModel) { selectedPokemon ->
+                    if (sharedViewModel.status.value == PokemonApiStatus.DONE) {
                         sharedViewModel.setPokemon(selectedPokemon)
                         findNavController().navigate(R.id.action_pokedexFragment_to_pokedexItemFragment)
                     }
-            }
+                }
         })
-
-
-
-
-
 
 
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
+                sharedViewModel.getPokemons()
                 findNavController().popBackStack()
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(callback)
 
 
-
-
         binding.backFab.setOnClickListener {
+            sharedViewModel.getPokemons()
             findNavController().navigate(R.id.action_pokedexFragment_to_homeFragment)
         }
 
 
+        binding.searchPokemonBox.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query != null) {
+                    for (i in sharedViewModel.pokemons.value!!) {
 
+                        if (i.id.toString().toLowerCase(Locale.ROOT).contains(query)) {
+                            sharedViewModel.pokemons.value = listOf(i)
+                        }
 
-        binding.searchFab.setOnClickListener{
-            val editText = binding.searchPokemonBox
-            editText.visibility = if (editText.visibility == View.GONE) View.VISIBLE else View.GONE
-
-            val bounceEditTextSearchPokemon= ObjectAnimator.ofFloat(
-                binding.searchPokemonBox, // For pokemon Image
-                "translationX",
-                0f,
-                30f,
-                0f,
-                -30f,
-                0f
-            )
-             bounceEditTextSearchPokemon.duration = 500
-             bounceEditTextSearchPokemon.start()
-
-            val rotationSearchButton = ObjectAnimator.ofFloat(
-                binding.searchFab,
-                "rotation",
-                0f,
-                360f,
-            )
-            rotationSearchButton.duration = 500
-            rotationSearchButton.start()
-        }
-
-        val adapter = PokedexItemAdapter(sharedViewModel) { selectedPokemon ->
-            if (sharedViewModel.status.value == PokemonApiStatus.DONE) {
-                sharedViewModel.setPokemon(selectedPokemon)
-                findNavController().navigate(R.id.action_pokedexFragment_to_pokedexItemFragment)
-            }
-        }
-
-        binding.searchPokemonBox.addTextChangedListener(object : TextWatcher{
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
+                    }
+                }
+                return true
             }
 
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                adapter.filter.filter(binding.searchPokemonBox.text.toString())
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
             }
 
-            override fun afterTextChanged(p0: Editable?) {
-            }
         })
 
-
-
+        binding.searchPokemonBox.setOnCloseListener {
+            val imm = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+            sharedViewModel.getPokemons()
+            true
+        }
 
     }
-
-
-
 }
 
 

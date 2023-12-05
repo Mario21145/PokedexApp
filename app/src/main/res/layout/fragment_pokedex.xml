@@ -37,8 +37,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:spanCount="3" />
 
@@ -57,40 +57,20 @@
                 app:tint="@color/white" />
 
 
-            <EditText
+            <androidx.appcompat.widget.SearchView
                 android:id="@+id/searchPokemonBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_margin="16dp"
                 android:background="@drawable/shape_search_pokemon"
                 android:backgroundTint="@color/material_dynamic_primary50"
-                android:layout_margin="16dp"
-                android:hint="search"
                 android:inputType="numberDecimal"
-                android:maxLength="4"
-                android:textStyle="bold"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white"
-                android:textAlignment="center"
-                app:layout_constraintTop_toTopOf="@id/searchFab"
-                app:layout_constraintBottom_toBottomOf="@id/searchFab"
+                app:layout_constraintBottom_toBottomOf="@id/backFab"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/backFab"
-                app:layout_constraintEnd_toStartOf="@id/searchFab"
-                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="@id/backFab"
                 />
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/searchFab"
-                style="@style/FloatingCustomStyle"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:backgroundTint="@color/material_dynamic_primary50"
-                android:src="@drawable/search"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:tint="@color/white" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

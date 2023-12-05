@@ -22,24 +22,14 @@ class ViewModelPokedex : ViewModel() {
     private val _pokemons = MutableLiveData<List<Pokemon>>().apply {
         listOf<Pokemon>()
     }
-    val pokemons: LiveData<List<Pokemon>> = _pokemons
+    var pokemons: MutableLiveData<List<Pokemon>> = _pokemons
 
     private val _currentPokemon = mutableListOf<Pokemon>()
     val currentPokemon = _currentPokemon
 
 
-
-    private val _filteredPokemon = MutableLiveData(" ")
-    val filteredPokemon: LiveData<String> = _filteredPokemon
-
-
     fun setPokemon(pokemon : Pokemon){
         _currentPokemon.add(pokemon)
-    }
-
-    fun setFilteredPokemon(id : String) {
-        _filteredPokemon.value = id
-        Log.d("Pokemon" , _filteredPokemon.value.toString())
     }
 
     init {
@@ -47,7 +37,7 @@ class ViewModelPokedex : ViewModel() {
     }
 
 
-    private fun getPokemons() {
+    fun getPokemons() {
         runBlocking{
             viewModelScope.launch {
                 _status.value = PokemonApiStatus.LOADING
