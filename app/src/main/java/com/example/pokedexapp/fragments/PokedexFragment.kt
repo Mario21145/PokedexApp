@@ -22,7 +22,9 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.pokedexapp.R
 import com.example.pokedexapp.adapters.PokedexItemAdapter
@@ -57,6 +59,13 @@ class PokedexFragment : Fragment() {
         return binding.root
     }
 
+    val callbackReturn = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            sharedViewModel.getPokemons()
+            findNavController().popBackStack()
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -76,32 +85,6 @@ class PokedexFragment : Fragment() {
         )
         bounceAnimatorIcon.duration = 1200
 
-
-        val connectivityManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        connectivityManager.registerDefaultNetworkCallback(object : ConnectivityManager.NetworkCallback() {
-            override fun onAvailable(network: Network) {
-                GlobalScope.launch(Dispatchers.Main) {
-                    binding.statusIcon!!.visibility = View.GONE
-                    binding.searchPokemonBox.visibility = View.VISIBLE
-                }
-            }
-
-            override fun onLost(network: Network) {
-                GlobalScope.launch(Dispatchers.Main) {
-                    binding.PokemonsRecyclerView.visibility = View.GONE
-                    binding.searchPokemonBox.visibility = View.GONE
-                    binding.statusIcon!!.visibility = View.VISIBLE
-                    binding.backFab.visibility = View.GONE
-                    bounceAnimatorIcon.start()
-                    delay(2000L)
-                    sharedViewModel.pokemons.value = listOf()
-                    sharedViewModel.setStatus(PokemonApiStatus.DEFAULT)
-                    sharedViewModel.getPokemons()
-                    findNavController().popBackStack()
-                }
-            }
-        })
-
         sharedViewModel.pokemons.observe(viewLifecycleOwner, Observer { pokemons ->
             binding.PokemonsRecyclerView.adapter =
                 PokedexItemAdapter(sharedViewModel) { selectedPokemon ->
@@ -113,13 +96,8 @@ class PokedexFragment : Fragment() {
         })
 
 
-        val callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                sharedViewModel.getPokemons()
-                findNavController().popBackStack()
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(callback)
+
+        requireActivity().onBackPressedDispatcher.addCallback(callbackReturn)
 
 
         binding.backFab.setOnClickListener {
@@ -149,13 +127,19 @@ class PokedexFragment : Fragment() {
         })
 
         binding.searchPokemonBox.setOnCloseListener {
-            val imm = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val imm =
+                view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(view.windowToken, 0)
             sharedViewModel.getPokemons()
             true
         }
-
     }
+
+    override fun onDestroyView() {
+        callbackReturn.remove()
+        super.onDestroyView()
+    }
+
 }
 
 

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.activityViewModels
@@ -52,6 +53,8 @@ class HomeFragment : Fragment() {
                 button.setOnClickListener {
                     if(pokemonCountTextView.text != "0"){
                         findNavController().navigate(R.id.action_homeFragment_to_pokedexFragment)
+                    } else {
+                        Toast.makeText(requireContext() , "No connection available" , Toast.LENGTH_SHORT).show()
                     }
                 }
 
