@@ -64,7 +64,7 @@
                 android:layout_margin="16dp"
                 android:background="@drawable/shape_search_pokemon"
                 android:backgroundTint="@color/material_dynamic_primary50"
-                android:inputType="numberDecimal"
+                android:inputType="text"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 />
