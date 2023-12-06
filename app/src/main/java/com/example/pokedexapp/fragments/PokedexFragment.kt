@@ -111,7 +111,14 @@ class PokedexFragment : Fragment() {
                 if (query != null) {
                     for (i in sharedViewModel.pokemons.value!!) {
 
-                        if (i.id.toString().toLowerCase(Locale.ROOT).contains(query)) {
+                        if (i.id.toString().contains(query)) {
+                            sharedViewModel.pokemons.value = listOf(i)
+                        }
+
+                    }
+
+                    for(i in sharedViewModel.pokemons.value!!){
+                        if(i.name.contains(query)){
                             sharedViewModel.pokemons.value = listOf(i)
                         }
 
@@ -127,8 +134,7 @@ class PokedexFragment : Fragment() {
         })
 
         binding.searchPokemonBox.setOnCloseListener {
-            val imm =
-                view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val imm = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(view.windowToken, 0)
             sharedViewModel.getPokemons()
             true
