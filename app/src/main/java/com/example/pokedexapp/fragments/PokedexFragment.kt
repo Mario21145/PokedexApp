@@ -108,21 +108,22 @@ class PokedexFragment : Fragment() {
 
         binding.searchPokemonBox.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
+                val list = mutableListOf<Pokemon>()
                 if (query != null) {
                     for (i in sharedViewModel.pokemons.value!!) {
 
                         if (i.id.toString().contains(query)) {
-                            sharedViewModel.pokemons.value = listOf(i)
+                            list.add(i)
+                        }
+
+                        if(i.name.contains(query , true)){
+                            list.add(i)
                         }
 
                     }
 
-                    for(i in sharedViewModel.pokemons.value!!){
-                        if(i.name.contains(query)){
-                            sharedViewModel.pokemons.value = listOf(i)
-                        }
+                    sharedViewModel.pokemons.value = list
 
-                    }
                 }
                 return true
             }
